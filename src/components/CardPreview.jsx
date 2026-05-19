@@ -141,14 +141,14 @@ export default function CardPreview({ form, theme, vcard }) {
       </div>
 
       {/* Download buttons */}
-      <div style={{ display: 'flex', gap: 8, width: '100%', maxWidth: 480 }}>
-        <button className="btn btn-primary" onClick={handleDownloadPDF} style={{ flex: 1 }}>
+      <div className="download-row">
+        <button className="btn btn-primary" onClick={handleDownloadPDF} >
           <DownloadIcon /> Download PDF
         </button>
-        <button className="btn btn-secondary" onClick={handleDownloadVCF} style={{ flex: 1 }}>
+        <button className="btn btn-secondary" onClick={handleDownloadVCF} >
           <ContactIcon /> Save .vcf
         </button>
-        <button className="btn btn-ghost" onClick={handleDownloadQR} style={{ flex: 1 }}>
+        <button className="btn btn-ghost" onClick={handleDownloadQR} >
           <QRIcon /> QR image
         </button>
       </div>

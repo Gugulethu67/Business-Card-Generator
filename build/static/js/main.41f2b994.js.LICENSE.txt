@@ -1,3 +1,9 @@
+/*! @azure/msal-browser v5.10.1 2026-05-11 */
+
+/*! @azure/msal-common v16.6.1 2026-05-11 */
+
+/*! @azure/msal-react v5.4.1 2026-05-11 */
+
 /**
    * @license
    * (c) Dean McNamee <dean@gmail.com>, 2013.
