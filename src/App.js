@@ -8,7 +8,6 @@ import CardForm from './components/CardForm';
 import CardPreview from './components/CardPreview';
 import { buildVCard } from './utils/vcard';
 import './App.css';
-import CapeTownTourismLogo from './logo/Cape Town Tourism-01.png';
 
 const DEFAULT_FORM = {
   fname: '', lname: '', title: '', company: '',
@@ -72,7 +71,14 @@ export default function App() {
     <div className="app">
       <header className="topbar">
         <div className="topbar-inner">
-          <img src={CapeTownTourismLogo} alt="Cape Town Tourism" style={{ width: 68, height: 50 }} />
+        <div className="topbar-logo">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+            <rect x="3" y="3" width="8" height="5" rx="1" />
+            <rect x="3" y="11" width="8" height="10" rx="1" />
+            <rect x="13" y="3" width="8" height="10" rx="1" />
+            <rect x="13" y="16" width="8" height="5" rx="1" />
+          </svg>
+        </div>
         <h1 className="topbar-title">Business Card Generator</h1>
         <div className="topbar-right">
           {(loading || isLoggingIn) && (
@@ -93,7 +99,14 @@ export default function App() {
       <UnauthenticatedTemplate>
         <div className="login-screen">
           <div className="login-card">
-              <img src={CapeTownTourismLogo} alt="Cape Town Tourism" style={{ width: 88, height: 88 }} />
+            <div className="login-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <rect x="3" y="3" width="8" height="5" rx="1" />
+                <rect x="3" y="11" width="8" height="10" rx="1" />
+                <rect x="13" y="3" width="8" height="10" rx="1" />
+                <rect x="13" y="16" width="8" height="5" rx="1" />
+              </svg>
+            </div>
             <h2 className="login-title">Business Card Generator</h2>
             <p className="login-subtitle">
               Sign in with your Cape Town Tourism Microsoft account to generate your digital business card. Your details will be filled in automatically.
@@ -129,7 +142,3 @@ function MicrosoftIcon() {
     </svg>
   );
 }
-
-
-
-

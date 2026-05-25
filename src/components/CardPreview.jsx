@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { QRCodeCanvas as QRCode } from 'qrcode.react';
 import { jsPDF } from 'jspdf';
 import QRCodeGen from 'qrcode';
-import { downloadVCF } from '../utils/vcard';
+import logo from '../logo/Cape Town Tourism-01.png';
 
 const THEME_STYLES = {
   night: { bg: '#1c1917', text: '#f5f3ef', bar: '#c84b31' },
@@ -19,6 +19,24 @@ function hexToRgb(hex) {
     parseInt(hex.slice(3, 5), 16),
     parseInt(hex.slice(5, 7), 16),
   ];
+}
+
+// Load image as base64 for jsPDF
+function loadImageAsBase64(src) {
+  return new Promise((resolve, reject) => {
+    const img = new window.Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      resolve(canvas.toDataURL('image/png'));
+    };
+    img.onerror = reject;
+    img.src = src;
+  });
 }
 
 export default function CardPreview({ form, theme, vcard }) {
@@ -47,13 +65,21 @@ export default function CardPreview({ form, theme, vcard }) {
 
     const [tr, tg, tb] = hexToRgb(t.text);
 
-    // Company name
-    pdf.setTextColor(tr, tg, tb);
-    pdf.setFontSize(6);
-    pdf.setFont('helvetica', 'bold');
-    pdf.text(display.company.toUpperCase(), 6, 9);
+    // Logo in PDF (top left)
+    try {
+      const logoBase64 = await loadImageAsBase64(logo);
+      // Logo aspect ratio is 406x298 ~ 1.36:1, render at height 10mm
+      pdf.addImage(logoBase64, 'PNG', 5, 3, 13.6, 10);
+    } catch (e) {
+      // Fallback to text if logo fails
+      pdf.setTextColor(tr, tg, tb);
+      pdf.setFontSize(6);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text(display.company.toUpperCase(), 6, 9);
+    }
 
     // Full name
+    pdf.setTextColor(tr, tg, tb);
     pdf.setFontSize(18);
     pdf.setFont('helvetica', 'normal');
     pdf.text(display.name, 6, 27);
@@ -64,12 +90,15 @@ export default function CardPreview({ form, theme, vcard }) {
 
     // Contact lines
     pdf.setFontSize(6.5);
-    let y = 44;
-    if (display.email)   { pdf.text(display.email,   6, y); y += 4; }
-    if (display.phone)   { pdf.text(display.phone,   6, y); y += 4; }
-    if (display.website) { pdf.text(display.website, 6, y); }
+    let y = 40;
+    if (display.email)  { pdf.text(display.email, 6, y); y += 3.5; }
+    if (display.phone)  { pdf.text(display.phone, 6, y); y += 3.5; }
+    pdf.text('33 Martin Hammerschlag Way, Cape Town City Center', 6, y); y += 3.5;
+    pdf.text('0861 322 223', 6, y); y += 3.5;
+    pdf.text('capetown.travel', 6, y);
+    
 
-    // QR — generated programmatically at high res, NOT captured from DOM
+    // QR code
     try {
       const qrDataUrl = await QRCodeGen.toDataURL(vcard, {
         width: 500,
@@ -85,10 +114,6 @@ export default function CardPreview({ form, theme, vcard }) {
     }
 
     pdf.save(`${form.fname || 'card'}_${form.lname || ''}.pdf`);
-  }
-
-  function handleDownloadVCF() {
-    downloadVCF(vcard, form.fname, form.lname);
   }
 
   function handleDownloadQR() {
@@ -111,7 +136,12 @@ export default function CardPreview({ form, theme, vcard }) {
       <div className="card-scene">
         <div ref={cardRef} className={`business-card theme-${theme}`}>
           <div className="card-bar" />
-          <div className="card-company">{display.company}</div>
+
+          {/* Logo replaces company name */}
+          <div className="card-logo-wrap">
+            <img src={logo} alt="Cape Town Tourism" className="card-logo" />
+          </div>
+
           <div>
             <div className="card-name">{display.name}</div>
             <div className="card-role">{display.title}</div>
@@ -119,8 +149,10 @@ export default function CardPreview({ form, theme, vcard }) {
           <div className="card-footer">
             <div className="card-contacts">
               <div className="card-contact-line">{display.email}</div>
-              {display.phone   && <div className="card-contact-line">{display.phone}</div>}
-              {display.website && <div className="card-contact-line">{display.website}</div>}
+              {display.phone && <div className="card-contact-line">{display.phone}</div>}
+              <div className="card-contact-line">📍 Darling Street, Cape Town</div>
+              <div className="card-contact-line">📞 0861 322 223</div>
+              <div className="card-contact-line">🌐 capetown.travel</div>
             </div>
             <QRCode value={vcard} size={46} level="H" />
           </div>
@@ -142,19 +174,44 @@ export default function CardPreview({ form, theme, vcard }) {
 
       {/* Download buttons */}
       <div className="download-row">
-        <button className="btn btn-primary" onClick={handleDownloadPDF} >
+        <button className="btn btn-primary" onClick={handleDownloadPDF}>
           <DownloadIcon /> Download PDF
         </button>
-        <button className="btn btn-secondary" onClick={handleDownloadVCF} >
-          <ContactIcon /> Save .vcf
-        </button>
-        <button className="btn btn-ghost" onClick={handleDownloadQR} >
+
+        <button className="btn btn-ghost" onClick={handleDownloadQR}>
           <QRIcon /> QR image
         </button>
       </div>
 
+      <div className="address-panel">
+        <div className="address-grid">
+          <div className="address-block">
+            <p className="address-heading">City Hall Visitor Experience</p>
+            <p className="address-line">📍 Darling Street, Cape Town</p>
+            <p className="address-line">Mon – Fri: 08:00 – 17:00</p>
+            <p className="address-line">Saturdays: 08:30 – 15:00</p>
+            <p className="address-line">Sundays & Public Holidays: 09:00 – 13:00</p>
+          </div>
+          <div className="address-block">
+            <p className="address-heading">Airport Visitor Experience</p>
+            <p className="address-line">Mon – Sun (incl. Public Holidays)</p>
+            <p className="address-line">07:00 – 20:00</p>
+            <p className="address-line">✉ airport@capetown.travel</p>
+            <p className="address-line">📞 086 132 2223</p>
+          </div>
+          <div className="address-block">
+            <p className="address-heading">General Contact</p>
+            <p className="address-line">✉ info@capetown.travel</p>
+            <p className="address-line">✉ airport@capetown.travel</p>
+            <p className="address-line">📞 0861 322 223</p>
+            <p className="address-line">📮 PO Box 1403, Cape Town 8000</p>
+          </div>
+        </div>
+      </div>
+
       <div className="tip-box">
         <strong>Tip:</strong> Share the PDF for printing, the .vcf for digital contacts, and the QR image over Teams or WhatsApp.
+        Windows users: right-click the .vcf → <strong>Open with</strong> → Outlook or People app.
       </div>
     </div>
   );
@@ -167,15 +224,6 @@ function DownloadIcon() {
     </svg>
   );
 }
-
-function ContactIcon() {
-  return (
-    <svg width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-      <rect x="4" y="2" width="16" height="20" rx="2" /><path d="M8 10h8M8 14h5" />
-    </svg>
-  );
-}
-
 function QRIcon() {
   return (
     <svg width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">

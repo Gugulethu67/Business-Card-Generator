@@ -14,6 +14,7 @@ export default function CardForm({ form, setField, theme, setTheme, loading }) {
   return (
     <div className="form-col">
 
+      {/* Profile summary — read only */}
       <p className="section-label">Your details</p>
 
       {loading ? (
