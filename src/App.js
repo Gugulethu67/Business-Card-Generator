@@ -18,7 +18,7 @@ export default function App() {
   const { instance, accounts, inProgress } = useMsal();
   const isAuthenticated = useIsAuthenticated();
   const [form, setForm] = useState(DEFAULT_FORM);
-  const [theme, setTheme] = useState('night');
+  const [theme, setTheme] = useState('chalk');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 

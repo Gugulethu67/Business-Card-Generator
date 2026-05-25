@@ -1,20 +1,20 @@
 {
   "files": {
     "main.css": "/static/css/main.3f2dffb8.css",
-    "main.js": "/static/js/main.a13a859d.js",
+    "main.js": "/static/js/main.9dfdb75e.js",
     "static/js/239.b9bd8911.chunk.js": "/static/js/239.b9bd8911.chunk.js",
     "static/js/977.3562c87a.chunk.js": "/static/js/977.3562c87a.chunk.js",
     "static/js/455.b91da448.chunk.js": "/static/js/455.b91da448.chunk.js",
     "static/media/Cape Town Tourism-01.png": "/static/media/Cape Town Tourism-01.2c477192eca0fe874737.png",
     "index.html": "/index.html",
     "main.3f2dffb8.css.map": "/static/css/main.3f2dffb8.css.map",
-    "main.a13a859d.js.map": "/static/js/main.a13a859d.js.map",
+    "main.9dfdb75e.js.map": "/static/js/main.9dfdb75e.js.map",
     "239.b9bd8911.chunk.js.map": "/static/js/239.b9bd8911.chunk.js.map",
     "977.3562c87a.chunk.js.map": "/static/js/977.3562c87a.chunk.js.map",
     "455.b91da448.chunk.js.map": "/static/js/455.b91da448.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.3f2dffb8.css",
-    "static/js/main.a13a859d.js"
+    "static/js/main.9dfdb75e.js"
   ]
 }

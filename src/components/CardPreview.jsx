@@ -52,7 +52,7 @@ export default function CardPreview({ form, theme, vcard }) {
   };
 
   async function handleDownloadPDF() {
-    const t = THEME_STYLES[theme] || THEME_STYLES.night;
+    const t = THEME_STYLES[theme] || THEME_STYLES.chalk;
     const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: [85.6, 53.98] });
 
     // Background
@@ -150,7 +150,7 @@ export default function CardPreview({ form, theme, vcard }) {
             <div className="card-contacts">
               <div className="card-contact-line">{display.email}</div>
               {display.phone && <div className="card-contact-line">{display.phone}</div>}
-              <div className="card-contact-line">📍 Darling Street, Cape Town</div>
+              <div className="card-contact-line">📍 33 Martin Hammerschlag Way, Cape Town City Center</div>
               <div className="card-contact-line">📞 0861 322 223</div>
               <div className="card-contact-line">🌐 capetown.travel</div>
             </div>
