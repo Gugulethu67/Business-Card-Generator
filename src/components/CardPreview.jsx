@@ -52,12 +52,12 @@ export default function CardPreview({ form, theme, vcard }) {
   };
 
   async function handleDownloadPDF() {
-    const t = THEME_STYLES[theme] || THEME_STYLES.chalk;
-    const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: [85.6, 53.98] });
+    const t = THEME_STYLES[theme] || THEME_STYLES.night;
+    const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: [85.6, 65] });
 
     // Background
     pdf.setFillColor(...hexToRgb(t.bg));
-    pdf.roundedRect(0, 0, 85.6, 53.98, 2, 2, 'F');
+    pdf.roundedRect(0, 0, 85.6, 65, 2, 2, 'F');
 
     // Accent bar
     pdf.setFillColor(...hexToRgb(t.bar));
@@ -91,12 +91,12 @@ export default function CardPreview({ form, theme, vcard }) {
     // Contact lines
     pdf.setFontSize(6.5);
     let y = 40;
-    if (display.email)  { pdf.text(display.email, 6, y); y += 3.5; }
-    if (display.phone)  { pdf.text(display.phone, 6, y); y += 3.5; }
-    pdf.text('33 Martin Hammerschlag Way, Cape Town City Center', 6, y); y += 3.5;
-    pdf.text('0861 322 223', 6, y); y += 3.5;
+    if (display.email)   { pdf.text(display.email,   6, y); y += 4; }
+    if (display.phone)   { pdf.text(display.phone,   6, y); y += 4; }
+    if (display.website) { pdf.text(display.website, 6, y); y += 4; }
+    pdf.text('Darling Street, Cape Town', 6, y); y += 4;
+    pdf.text('0861 322 223', 6, y); y += 4;
     pdf.text('capetown.travel', 6, y);
-    
 
     // QR code
     try {
@@ -107,14 +107,16 @@ export default function CardPreview({ form, theme, vcard }) {
         color: { dark: '#000000', light: '#ffffff' },
       });
       pdf.setFillColor(255, 255, 255);
-      pdf.roundedRect(67, 35, 15, 15, 1, 1, 'F');
-      pdf.addImage(qrDataUrl, 'PNG', 67.5, 35.5, 14, 14);
+      pdf.roundedRect(67, 46, 15, 15, 1, 1, 'F');
+      pdf.addImage(qrDataUrl, 'PNG', 67.5, 46.5, 14, 14);
     } catch (e) {
       console.error('QR error', e);
     }
 
     pdf.save(`${form.fname || 'card'}_${form.lname || ''}.pdf`);
   }
+
+
 
   function handleDownloadQR() {
     QRCodeGen.toDataURL(vcard, {
@@ -149,7 +151,8 @@ export default function CardPreview({ form, theme, vcard }) {
           <div className="card-footer">
             <div className="card-contacts">
               <div className="card-contact-line">{display.email}</div>
-              {display.phone && <div className="card-contact-line">{display.phone}</div>}
+              {display.phone   && <div className="card-contact-line">{display.phone}</div>}
+              {display.website && <div className="card-contact-line">🔗 {display.website}</div>}
               <div className="card-contact-line">📍 33 Martin Hammerschlag Way, Cape Town City Center</div>
               <div className="card-contact-line">📞 0861 322 223</div>
               <div className="card-contact-line">🌐 capetown.travel</div>
@@ -224,6 +227,7 @@ function DownloadIcon() {
     </svg>
   );
 }
+
 function QRIcon() {
   return (
     <svg width="13" height="13" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
